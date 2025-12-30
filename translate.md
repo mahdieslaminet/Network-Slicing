@@ -231,7 +231,10 @@ $$Y \in \mathbb{R}^{d \times m}$$ ماتریسِ ترانهاده (transpose mat
 <img width="487" height="63" alt="Screenshot 2025-12-30 221438" src="https://github.com/user-attachments/assets/306439e6-dcbc-48a4-bfe3-4c9ccdb1ec96" />
 
 
-$$\|X\|_{F}^{2}=\left(\sum_{i}\|x_i\|_{2}^{2}\right)^{1/2}$$ نُرم فروبنیوس (Frobenius norm) ماتریس $$X$$ است.  
+$$
+\lVert X\rVert_F^2 = \sum_i \lVert x_i\rVert_2^2
+$$
+ نُرم فروبنیوس (Frobenius norm) ماتریس $$X$$ است.  
 در این مقاله، از تابع هدفِ تنک (sparse) زیر استفاده می‌کنیم:
 
 
