@@ -350,3 +350,296 @@ $$
 \frac{\partial s(W)_{2}}{\partial W}=(XLX^{T}+XL^{T}X^{T})W=2XLX^{T}W
 \qquad (14)
 $$
+
+که در آن، $$L$$ یک ماتریس متقارن است، پس $$L=L^{T}$$.  
+
+$$
+\frac{\partial s(W)}{\partial W}
+=2XX^{T}W-2XY+2\rho_{2}XLX^{T}W
+=2(XX^{T}+\rho_{2}XLX^{T})W-2XY
+\qquad (15)
+$$
+
+نزول گرادیانی (gradient descent) روی جملهٔ هموار (smooth term) انجام می‌شود تا یک نتیجهٔ میانی به دست آید:
+
+$$
+W^{k+\frac{1}{2}}=W^{k}-\alpha * \nabla s(W^{k})
+\qquad (16)
+$$
+
+که در آن $$\alpha$$ نرخ یادگیری (learning rate) است. پس:
+
+$$
+W^{k+\frac{1}{2}}
+=W^{k}-2\alpha (X^{T}X+\rho_{2}XLX^{T})W^{k}+2\alpha XY
+\qquad (17)
+$$
+
+سپس نتیجهٔ میانی در جملهٔ غیرهموار (non-smooth term) جایگذاری می‌شود تا تصویر (projection) نقاط مجاور آن به دست آید؛ یعنی یک تکرار (iteration) کامل شود.
+
+$$
+W^{k+1}=\arg\min_{W}\left\{\rho_{1}\lVert W\rVert_{1}+\frac{1}{2\alpha}\lVert W-W^{k+\frac{1}{2}}\rVert_{2}^{2}\right\}
+\qquad (18)
+$$
+
+فرض کنید:
+
+$$
+v(W)=\left\{\rho_{1}\lVert W\rVert_{1}+\frac{1}{2\alpha}\lVert W-W^{k+\frac{1}{2}}\rVert_{2}^{2}\right\}
+\qquad (19)
+$$
+
+$$
+\frac{\partial v(W)}{\partial (W)}=\frac{1}{\alpha}\left(W-W^{k+\frac{1}{2}}\right)+\rho_{1}\,\mathrm{sgn}(W)
+\qquad (20)
+$$
+
+برای مشتق‌های $$\rho_{1}\lVert W\rVert_{1}$$، از آستانه‌گذاری نرم (soft thresholding) [27] استفاده می‌شود. سپس $$W$$ را به شکل زیر به‌روزرسانی می‌کنیم:
+
+$$
+W^{k+1}=\mathrm{soft}\left(W^{k+\frac{1}{2}},\alpha\rho_{1}\right)
+=\mathrm{sign}\left(W^{k+\frac{1}{2}}\right)\max\left\{\left|W^{k+\frac{1}{2}}\right|-\alpha\rho_{1},0\right\}
+\qquad (21)
+$$
+
+$$
+W^{k+1}=
+\begin{cases}
+W^{k+\frac{1}{2}}+\alpha\rho_{1}, & W^{k+\frac{1}{2}}<-\alpha\rho_{1} \\
+0, & \left|W^{k+\frac{1}{2}}\right|\le \alpha\rho_{1} \\
+W^{k+\frac{1}{2}}-\alpha\rho_{1}, & W^{k+\frac{1}{2}}>\alpha\rho_{1}
+\end{cases}
+\qquad (22)
+$$
+
+طبق قضیهٔ همگرایی (convergence theorem) [28]:
+
+$$
+f(W(t_k))-f(W^{*})\le \frac{2\gamma \lVert W(1)-W^{*}\rVert_{F}^{2}}{(t+1)^{2}}
+\qquad (23)
+$$
+
+که در آن $$\gamma$$ یک ثابتِ مثبتِ از پیش تعریف‌شده است، و $$L$$ یک ثابتِ لیپشیتزِ تدریجی (gradual Lipschitz constant) است.  
+در ترکیب با معادله (22)، $$W^{k+1}$$ مطابق معادله (24) به‌دست می‌آید:
+
+$$
+W^{k+1}=
+\begin{cases}
+W^{k}-2\alpha(XX^{T}+\rho_{2}XLX^{T})W^{k}+2\alpha XY+\alpha\rho_{1}, & W^{k+\frac{1}{2}}<-\alpha\rho_{1} \\
+0, & \left|W^{k+\frac{1}{2}}\right|<\alpha\rho_{1} \\
+W^{k}-2\alpha(XX^{T}+\rho_{2}XLX^{T})W^{k}+2\alpha XY-\alpha\rho_{1}, & W^{k+\frac{1}{2}}>\alpha\rho_{1}
+\end{cases}
+\qquad (24)
+$$
+
+شبه‌کدِ O-KNN در الگوریتم 2 ارائه شده است.
+
+
+
+<img width="703" height="624" alt="Screenshot 2025-12-30 223341" src="https://github.com/user-attachments/assets/90ad4181-bff7-4702-b567-db92b377e90a" />
+
+
+## 4. نتایج عددی (Numerical Results)
+
+### 4.1. تنظیمات آزمایش (Experimental Settings)
+هدف این پژوهش، ارائهٔ یک طرحِ قابل‌اعتماد برای برآوردِ نسبت برش (slice ratio) برای یک موردِ پرس‌وجو (query case) است.  
+تنظیمات پارامترهای سناریو در جدول 3 نشان داده شده‌اند.  
+ما یک RAN با هفت wrap-around سلولی را در نظر می‌گیریم (فقط توزیع کاربرانِ سلولِ مرکزی با هم تطبیق داده می‌شود و سلول‌های دیگر به‌عنوان منابع تداخل عمل می‌کنند).  
+سخت‌افزار استفاده‌شده برای انجام این آزمایش، پردازندهٔ **Core Intel(R) Core(TM) i5-8250U** است.
+
+
+
+<img width="683" height="317" alt="Screenshot 2025-12-30 223438" src="https://github.com/user-attachments/assets/7170c862-3fa8-42b4-b2c4-ec1a10d0e3f7" />
+
+
+<img width="662" height="332" alt="Screenshot 2025-12-30 223457" src="https://github.com/user-attachments/assets/29432afe-e1a0-42c9-b504-25c3a3f3c4f2" />
+
+
+### 4.2. انتخاب تابع وزن (Choice of Weight Function)
+
+ما فاصله را با توابع وزن‌دهیِ مختلف از جدول 2 آزمودیم، و مقدارِ $$k$$ با استفاده از اعتبارسنجی متقاطع (cross-validation) و با $$300$$ موردِ پرس‌وجو (query cases) تعیین شد.  
+نتیجه در شکل 4 نشان داده شده است و نشان می‌دهد که **معکوسِ فاصله (inverse distance)** کمترین مقدارِ $$RMSE$$ را برای نسبت برش دارد.  
+بنابراین، **معکوسِ فاصله** برای همهٔ آزمون‌های بعدی استفاده می‌شود.
+
+
+
+<img width="611" height="405" alt="Screenshot 2025-12-30 223542" src="https://github.com/user-attachments/assets/67b4d58d-16ce-4e4c-adbc-bb89eaada9a0" />
+
+
+### 4.3. تعیین مقدار $$k$$ (Determination of k)
+
+برای انتخاب بهترین مقدارِ $$k$$، ما سه روش متفاوت برای تعیین مقدارِ $$k$$ را مقایسه کردیم:  
+مقدار ثابتِ $$k$$ ($$1,3,5,7$$)، مقدارِ $$k$$ تعیین‌شده با اعتبارسنجی متقاطع به‌عنوان **CV-KNN** [13]، و **O-KNN** پیشنهادی.  
+خطای پیش‌بینی برای این رویکردهای مختلف، در تعدادهای متفاوتی از مواردِ پرس‌وجو (query cases)، در شکل 5 نشان داده شده است.  
+واضح است که **O-KNN** و **CV-KNN** از مقدار ثابتِ $$k$$ بهتر عمل می‌کنند و **O-KNN** کمی بهتر است.
+
+
+<img width="658" height="401" alt="Screenshot 2025-12-30 223624" src="https://github.com/user-attachments/assets/314c2d7a-961d-4411-8e88-51e9c44b46c9" />
+
+
+عاملِ دیگری که باید در نظر گرفته شود، زمانِ جست‌وجو برای یافتن بهترین مقدارِ $$k$$ است.  
+این موضوع در شکل 6 نشان داده شده است.  
+زمانِ جست‌وجو بر روی $$300$$ موردِ پرس‌وجو (query cases) میانگین‌گیری شده است.  
+نتیجه نشان می‌دهد که **O-KNN** زمانِ جست‌وجویی دارد که تقریباً یک‌دهمِ **CV-KNN** است، زیرا فضای جست‌وجو با **یادگیری تنک (sparse learning)** کاهش داده می‌شود.
+
+
+
+<img width="664" height="420" alt="Screenshot 2025-12-30 223703" src="https://github.com/user-attachments/assets/63da9362-504a-4c5c-84b4-8fcabfb441d1" />
+
+
+### 4.4. پیش‌بینی نسبت پهنای‌باند برش (Slice Bandwidth Ratio Prediction)
+
+نتیجهٔ آزمون‌های بالا نشان می‌دهد که **O-KNN** از نظر هزینهٔ اجرا (running cost) و $$RMSE$$ برای پیش‌بینی نسبت برش مناسب است.  
+بنابراین، **O-KNN** می‌تواند برای آزمونِ پیش‌بینی نسبت برش استفاده شود.  
+توزیع نسبت برش در دادهٔ آزمون (test) و پیش‌بینی (prediction) در شکل 7 نشان داده شده است.  
+در آزمون، پیش‌بینیِ دو برش روی محور افقی نمایش داده شده است و نسبت برش روی محور عمودی نمایش داده می‌شود.  
+از شکل 7 می‌بینیم که میانهٔ (median) نسبت برشِ برش 1 حدود $$0.55$$ است، میانهٔ نسبت برشِ برش 2 حدود $$0.45$$ است، و مجموع آن‌ها $$1$$ می‌شود.  
+با این حال، هر دو توزیعِ نسبت برشِ دادهٔ آزمون و پیش‌بینی تقریباً توزیع یکسانی دارند؛ بنابراین، پیش‌بینی خوب است.  
+$$RMSE$$ برای هر $$300$$ موردِ پرس‌وجو (query cases) برابر $$0.01986$$ با استفاده از **O-KNN** است.
+
+
+
+<img width="633" height="419" alt="Screenshot 2025-12-30 223748" src="https://github.com/user-attachments/assets/9b4d0cd1-d677-46e9-9f29-52e5d36be3b9" />
+
+
+### 4.5. نسبت کاربران واجد شرایط (Qualified User Ratio)
+
+**QUR** معیار نهاییِ عملکرد است.  
+ما QUR را برای $$20$$ موردِ پرس‌وجوی اضافی با تعدادهای متفاوتی از کاربران آزمودیم و نتایج در شکل 8 نشان داده شده‌اند.  
+**PQUR**، QUR پیش‌بینی‌شده با استفاده از **O-KNN** است.  
+**TQUR**، QUR حاصل از **جست‌وجوی جامع (exhaustive search)** برای آن موارد است.  
+**HQUR** نشان‌دهندهٔ QUR با **برش‌بندی سخت (hard slicing)** است.  
+برش‌بندی سخت یعنی به هر سرویس همیشه $$\frac{1}{2}$$ از کل پهنای‌باند تخصیص داده می‌شود (چون در مجموع دو نوع سرویس وجود دارد).  
+
+واضح است که **PQUR** در رویکرد **O-KNN** خطای پیش‌بینی بسیار پایینی نسبت به **TQUR** دارد، و توسط **HQUR** بهتر عمل می‌شود.  
+بنابراین، رویکرد **O-KNN** مؤثر است.
+
+
+
+<img width="651" height="423" alt="Screenshot 2025-12-30 223825" src="https://github.com/user-attachments/assets/c8a34194-8e8b-4757-97e2-300ef036a765" />
+
+
+## 5. نتیجه‌گیری‌ها (Conclusions)
+
+در این مقاله، امکان‌پذیریِ استفاده از رویکردِ **یادگیری تنک (sparse learning)** و **فرافکنی‌های حفظ‌کنندهٔ محلیت (locality-preserving projections)** را در چارچوب **CBR** برای مسئلهٔ یافتن بهترین تطبیق جهت تعیین نسبت برش (slice ratio) در شبکه‌بُرشِ RAN بررسی کردیم.  
+ابتدا خطا در تعیین نسبت را با استفاده از توابع وزن‌دهی مختلف آزمودیم.  
+بهترین تابع وزن‌دهی، تابع **معکوسِ فاصله (inverse distance)** تشخیص داده شد.  
+در مقایسهٔ روش‌های **KNN**، نشان دادیم که **O-KNN** برای تعیین مقدار $$k$$ از سایر رویکردها بهتر عمل می‌کند، هرچند فقط اندکی بهتر از **CV-KNN** است.  
+با این حال، زمانِ جست‌وجوی مقدار $$k$$ در **O-KNN** به‌طور قابل‌توجهی بهتر از **CV-KNN** بود، زیرا فضای جست‌وجو کاهش یافته بود.  
+نتیجه این شد که الگوریتم پیشنهادی می‌تواند تخصیص منابع مؤثری را برای سرویس‌های ترکیبیِ $$S1$$ و $$S2$$ انجام دهد و ارزش پیگیری در یک سناریوی پیچیده‌تر را دارد.
+
+در مجموع، **O-KNN** برای تخصیص منابع در شبکه‌بُرش بسیار مؤثر است.  
+در آینده، یک محیط عملی‌تر با چندین ویژگی (multiple attributes) را شبیه‌سازی خواهیم کرد تا با تعداد موارد کمتر، تطبیق بهتر شود و امکان مقادیر متفاوت برای $$S1$$ و $$S2$$ فراهم گردد.  
+همچنین یک چارچوب بهینه‌سازی عمومی‌تر را بررسی خواهیم کرد که بتواند با بیش از دو برش کنار بیاید.
+
+**مشارکت نویسندگان (Author Contributions):** روش‌شناسی (Methodology)، L.C.; نرم‌افزار (Software)، D.Y.; تحلیل رسمی (Formal analysis)، X.Y. همهٔ نویسندگان نسخهٔ منتشرشدهٔ مقاله را خوانده‌اند و با آن موافقت کرده‌اند.  
+**حمایت مالی (Funding):** این پژوهش هیچ حمایت مالی خارجی دریافت نکرد.  
+**بیانیهٔ هیئت بازبینی نهادی (Institutional Review Board Statement):** قابل اعمال نیست.  
+**بیانیهٔ رضایت آگاهانه (Informed Consent Statement):** قابل اعمال نیست.  
+**بیانیهٔ دسترس‌پذیری داده‌ها (Data Availability Statement):** اشتراک‌گذاری داده‌ها قابل اعمال نیست.  
+**تعارض منافع (Conflicts of Interest):** نویسندگان اعلام می‌کنند هیچ تعارض منافعی وجود ندارد.
+
+
+## پیوست A (Appendix A)
+
+همان‌طور که در معادله $$ (A1) $$ نشان داده شده است، که در آن $$D_{ii}=\sum_{j}s_{ij}$$.  
+$$L$$ و $$D$$ ماتریس‌های حقیقیِ متقارن هستند.
+
+
+
+<img width="650" height="381" alt="Screenshot 2025-12-30 223935" src="https://github.com/user-attachments/assets/4845f60b-68d0-4cc7-8b37-35ff9f187307" />
+
+
+
+
+## منابع (References)
+
+1. Zhang, H.; Liu, N.; Chu, X.; Long, K.; Aghvami, A.H.; Leung, V.C.  
+   شبکه‌بُرش مبتنی بر 5G و شبکه‌های موبایل آینده: تحرک، مدیریت منابع و چالش‌ها. *IEEE Communications Magazine*، 2017، 8، 138–145. [CrossRef]
+
+2. Afolabi, I.; Taleb, T.; Samdanis, K.; Ksentini, A.; Flinck, H.  
+   شبکه‌بُرش و نرم‌افزارمحور شدن: مروری بر اصول، فناوری‌های توانمندساز و راهکارها. *IEEE Communications Surveys & Tutorials*، 2018، 20، 2429–2453. [CrossRef]
+
+3. Guijarro, L.; Vidal, J.R.; Pla, V.  
+   رقابت بین ارائه‌دهندگان سرویس با تخصیص راهبردی منابع: کاربرد در شبکه‌بُرش. *IEEE Access*، 2018، 9، 6503–76517.
+
+4. Liu, Q.; Han, T.; Zhang, N.; Wang, Y.D.  
+   DeepSlicing: تخصیص منابعِ کمک‌گرفته از یادگیری تقویتی عمیق برای شبکه‌بُرش. در: *Proceedings of the 2020 IEEE Global Communications Conference*، تایپه، تایوان، 7–11 دسامبر 2020؛ صص. 1–6.
+
+5. Wang, H.; Wu, Y.; Min, G.; Xu, J.; Tang, P.D.  
+   زمان‌بندی پویای منابع مبتنی بر داده برای شبکه‌بُرش: یک رویکرد یادگیری تقویتی عمیق. *Information Sciences*، 2019، 498، 106–116. [CrossRef]
+
+6. Sun, G.; Gebrekidan, Z.T.; Boateng, G.O.; Ayepah-Mensah, D.; Jiang, W.  
+   رزرو پویا و برش‌بندی خودمختار منابع مبتنی بر یادگیری تقویتی عمیق برای شبکه‌های دسترسی رادیویی مجازی‌سازی‌شده. *IEEE Access*، 2019، 7، 45758–45772. [CrossRef]
+
+7. Akgul, O.U.; Malanchini, I.; Capone, A.  
+   تخصیص پیش‌نگرانهٔ منابع و دادوستد در یک شبکهٔ برش‌بندی‌شده. در: *Proceedings of the ICC 2019—2019 IEEE International Conference on Communications (ICC)*، شانگهای، چین، 20–24 مه 2019؛ صص. 1–7.
+
+8. Feng, L.; Zi, Y.; Li, W.; Zhou, F.; Yu, P.; Kadoch, M.D.  
+   تخصیص پویای منابع با برش‌بندی و زمان‌بندی RAN برای سرویس ترکیبی uRLLC و eMBB. *IEEE Access*، 2020، 8، 34538–34551. [CrossRef]
+
+9. Sun, Y.; Peng, M.; Mao, S.; Yan, S.  
+   تخصیص سلسله‌مراتبی منابع رادیویی برای شبکه‌بُرش در شبکه‌های دسترسی رادیویی مه‌آلود (Fog RAN). *IEEE Transactions on Vehicular Technology*، 2020، 64، 3866–3881. [CrossRef]
+
+10. Yang, X.; Liu, Y.; Chou, K.; Cuthbert, L.  
+   یک رویکرد نظریه بازی برای شبکه‌بُرش. در: *Proceedings of the 27th International Telecommunication Networks and Applications Conference (ITNAC)*، ملبورن، استرالیا، 22–24 نوامبر 2017؛ صص. 1–4.
+
+11. Yang, X.; Wang, Y.; Wong, I.C.; Liu, Y.; Cuthbert, L.  
+   الگوریتم ژنتیک در تخصیص منابعِ برش‌بندی RAN با جداسازی QoS و انصاف. در: *Proceedings—2020 IEEE Latin-American Conference on Communications (LATINCOM)*، سانتو دومینگو، جمهوری دومینیکن، 18–20 نوامبر 2020.
+
+12. Yang, X.; Liu, Y.; Wong, I.C.; Wang, Y.; Cuthbert, L.  
+   جداسازی مؤثر در شبکه‌بُرش پویا. در: *Proceedings of the IEEE Wireless Communications and Networking Conference (WCNC)*، مراکش، مراکش، 15–18 آوریل 2019.
+
+13. Yan, D.; Yang, X.; Cuthbert, L.  
+   k نزدیک‌ترین همسایهٔ مبتنی بر رگرسیون برای تخصیص منابع در شبکه‌بُرش. در: *Proceedings of the 2022 Wireless Telecommunications Symposium (WTS)*، پومونا، کالیفرنیا، آمریکا، 6–8 آوریل 2022؛ صص. 1–6.
+
+14. Yao, N.  
+   یک رویکرد CBR برای کنترل الگوی تابش در شبکه‌های WCDMA؛ *Queen Mary University of London*: لندن، بریتانیا، 2007.
+
+15. Chantaraskul, S.  
+   یک رویکرد عامل هوشمند برای مدیریت ازدحام در شبکه‌های W-CDMA؛ *Queen Mary University of London*: لندن، بریتانیا، 2005.
+
+16. Morton, A.B.; Mareels, I.M.  
+   یک راه‌حل brute-force کارآمد برای مسئلهٔ پیکربندی مجدد شبکه. *IEEE Transactions on Power Delivery*، 2000، 15، 996–1000. [CrossRef]
+
+17. Yao, Z.; Ruzzo, W.L.  
+   یک الگوریتم k نزدیک‌ترین همسایه مبتنی بر رگرسیون برای پیش‌بینی عملکرد ژن از داده‌های ناهمگن. *BMC Bioinformatics*، 2006، 7، 1–11. [CrossRef] [PubMed]
+
+18. Kang, S.  
+   یادگیری k-نزدیک‌ترین همسایه با شبکه‌های عصبی گرافی. *Water Resources Research*، 2021، 9، 830. [CrossRef]
+
+19. Lall, U.; Sharma, A.  
+   بوت‌استرپ نزدیک‌ترین همسایه برای نمونه‌برداری مجدد سری‌های زمانی هیدرولوژیک. *Water Resources Research*، 1996، 32، 679–693. [CrossRef]
+
+20. Zhang, S.; Li, X.; Zong, M.; Zhu, X.; Wang, R.  
+   یک طبقه‌بندی kNN کارآمد با تعدادهای متفاوتِ همسایهٔ نزدیک. *IEEE Transactions on Neural Networks and Learning Systems*، 1996، 29، 1774–1785. [CrossRef] [PubMed]
+
+21. Zhang, S.; Zong, M.; Sun, K.; Liu, Y.; Cheng, D.  
+   الگوریتم kNN کارآمد مبتنی بر بازسازی تنکِ گراف. در: *International Conference on Advanced Data Mining and Applications*؛ Springer: Cham، سوئیس، 2014؛ صص. 153–160.
+
+22. Zhu, X.; Suk, H.I.; Shen, D.  
+   تابع زیان مبتنی بر شباهت ماتریس و انتخاب ویژگی برای تشخیص بیماری آلزایمر. در: *Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition*، کلمبوس، اوهایو، آمریکا، 23–28 ژوئن 2014؛ صص. 3089–3096.
+
+23. Li, X.; Pang, Y.; Yuan, Y.  
+   2DPCA مبتنی بر نُرم $$l_1$$. *IEEE Transactions on Systems*، 1996، 40، 1170–1175.
+
+24. Zhu, X.; Suk, H.I.; Shen, D.  
+   یک روش منظم‌سازی چندرابطه‌ای نوین برای رگرسیون و طبقه‌بندی در تشخیص AD. در: *International Conference on Medical Image Computing and Computer-Assisted Intervention* (سپتامبر 2014)؛ Springer: Cham، سوئیس، 2014؛ صص. 401–408.
+
+25. He, X.; Niyogi, P.  
+   فرافکنی‌های حفظ‌کنندهٔ محلیت. در: *Advances in Neural Information Processing Systems*؛ MIT Press: Cambridge، ماساچوست، آمریکا، 2003؛ جلد 16.
+
+26. Wright, S.J.; Nowak, R.D.; Figueiredo, M.A.  
+   بازسازی تنک با تقریبِ تفکیک‌پذیر. *IEEE Transactions on Signal Processing*، 2009، 57، 2479–2493. [CrossRef]
+
+27. Beck, A.; Teboulle, M.  
+   یک الگوریتم سریعِ تکراریِ انقباض-آستانه‌گذاری برای مسائل وارون خطی. *SIAM Journal on Imaging Sciences*، 2009، 2، 183–202. [CrossRef]
+
+28. Gong, Y.; Dend, Z.; Sun, K.; Liu, Y.  
+   الگوریتم رگرسیون kNN مبتنی بر LPP و Lasso. *Journal of Chinese Computer Systems*، 2015، 36، 2604–2608.
+
+---
+
+**یادداشت/بیانیهٔ ناشر (Disclaimer/Publisher’s Note):**  
+بیانیه‌ها، دیدگاه‌ها و داده‌های موجود در همهٔ انتشارات صرفاً متعلق به نویسنده(ها) و مشارکت‌کننده(ها) است و متعلق به MDPI و/یا سردبیر(ها) نیست.  
+MDPI و/یا سردبیر(ها) مسئولیتی در قبال هرگونه آسیب به افراد یا اموال که ناشی از ایده‌ها، روش‌ها، دستورالعمل‌ها یا محصولات اشاره‌شده در محتوا باشد، نمی‌پذیرند.
