@@ -232,8 +232,9 @@ $$Y \in \mathbb{R}^{d \times m}$$ ماتریسِ ترانهاده (transpose mat
 
 
 $$
-\lVert X\rVert_F^2 = \sum_i \lVert x_i\rVert_2^2
+\lVert X\rVert_F = \left(\sum_i \lVert x_i\rVert_2^2\right)^{1/2}
 $$
+
  نُرم فروبنیوس (Frobenius norm) ماتریس $$X$$ است.  
 در این مقاله، از تابع هدفِ تنک (sparse) زیر استفاده می‌کنیم:
 
