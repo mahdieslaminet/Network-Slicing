@@ -242,19 +242,17 @@ $$
 
 <img width="469" height="57" alt="Screenshot 2025-12-30 221518" src="https://github.com/user-attachments/assets/0cea0886-f85a-4ac3-ad06-ef34455d152d" />
 
-
-
 که در آن $$\lVert W\rVert_{1}$$ یک جملهٔ منظم‌سازی با نُرم $$l_1$$ است [23] تا ضریب بازسازیِ تنک (sparse reconstruction coefficient) تولید شود، و $$W \succ 0$$ یعنی هر عنصرِ $$W$$ نامنفی است.  
-هرچه مقدارِ $$\rho_{1}$$ بزرگ‌تر باشد، $$W$$ تنک‌تر (sparse‌تر) است.  
+هرچه مقدارِ $$\rho_{1}$$ بزرگ‌تر باشد، $$W$$ تنک‌تر است.  
 
 برای اینکه مطمئن شویم $$k$$ نزدیک‌ترین همسایهٔ دادهٔ اصلی بعد از کاهش بُعد در فضای جدید حفظ می‌شوند، جملهٔ منظم‌سازیِ فرافکنی‌های حفظ‌کنندهٔ محلیت (LPP) را بین کتابخانهٔ موارد و خودشان اعمال می‌کنیم [24].  
-کتابخانهٔ موارد $$X \in \mathbb{R}^{n \times d}$$ به $$Y \in \mathbb{R}^{d \times m}$$ نگاشت می‌شود، ماتریس فرافکنی $$W \in \mathbb{R}^{n \times m}$$ است، و $$y_j = X^{T} w_j$$.  
+کتابخانهٔ موارد $$X \in \mathbb{R}^{n \times d}$$ به $$Y \in \mathbb{R}^{d \times m}$$ نگاشت می‌شود، یک ماتریس فرافکنی $$W \in \mathbb{R}^{n \times m}$$ است، و $$y_j = X^{T} w_j$$.  
 در نتیجه، تابع هدفِ LPP به صورت زیر است:  
 
 $$
 \min_{Y=X^{T}W}\ \frac{1}{2}\sum_{i,j}^{d} s_{ij}\,\lVert y_i-y_j\rVert_{2}^{2}
 \ =\ 
-\min_{W}\ \operatorname{tr}\!\left(W^{T}XLX^{T}W\right)
+\min_{W}\ \mathrm{tr}\!\left(W^{T}XLX^{T}W\right)
 \qquad (7)
 $$
 
@@ -267,7 +265,7 @@ $$
 s_{ij} = e^{-\frac{\lVert x^{i}-x^{j}\rVert_{2}^{2}}{2\sigma^{2}}}
 $$
 
-(که در آن $$\sigma$$ یک ثابتِ پارامتر تنظیم (tuning parameter) است).  
+(که در آن $$\sigma$$ یک ثابتِ پارامتر تنظیم (tuning parameter constant) است).  
 ما از ماتریس مجاورت $$S$$ برای نمایش گرافِ همبستگیِ ویژگی‌ها استفاده می‌کنیم.  
 $$D$$ یک ماتریس قطری است که درایه‌های آن مجموع‌های ستونی (یا سطری، چون $$S$$ متقارن است)ِ $$S$$ هستند، یعنی:  
 
@@ -275,24 +273,24 @@ $$
 D_{ii}=\sum_{j=1}^{d}s_{ij}
 $$
 
-$$L \in \mathbb{R}^{d \times d}$$، و $$L=D-S$$ ماتریس لاپلاسی (Laplacian) است [25].  
+$$L \in \mathbb{R}^{d \times d}$$، و $$L = D - S$$ ماتریس لاپلاسی (Laplacian matrix) است [25].  
 اثبات در پیوست A نشان داده شده است.  
 
 در نهایت، تابع هدف برای فرآیند بازسازی به صورت زیر تعریف می‌شود:  
 
 $$
 f(W)=\min_{W}\Big(\lVert X^{T}W-Y\rVert_{F}^{2}+\rho_{1}\lVert W\rVert_{1}
-+\rho_{2}\operatorname{tr}(W^{T}XLX^{T}W)\Big),\ \ W \succeq 0
++\rho_{2}\,\mathrm{tr}(W^{T}XLX^{T}W)\Big),\ \ W \ge 0
 \qquad (8)
 $$
 
-$$\operatorname{tr}(\bullet)$$ عملگرِ تِرِیس (trace) است.  
-ما مشتقِ مرتبهٔ اولِ معادله (8) را نسبت به $$W^{*}$$ می‌گیریم و سپس با استفاده از رویکرد گرادیان پروکسیمالِ شتاب‌دار (accelerated proximal gradient) آن را برابر صفر قرار می‌دهیم.  
+$$\mathrm{tr}(\bullet)$$ عملگر تریس (trace operator) است.  
+ما مشتقِ مرتبهٔ اولِ معادله (8) را نسبت به $$W^{*}$$ می‌گیریم و سپس با استفاده از رویکرد گرادیان پروکسیمالِ شتاب‌دار (accelerated proximal gradient approach) آن را برابر $$0$$ قرار می‌دهیم.  
 $$\min f(W)=s(W)+r(W)$$.  
 $$s(W)$$ کوژ (convex) و مشتق‌پذیر است و به صورت زیر است:  
 
 $$
-s(W)=\min_{W}\Big(\lVert X^{T}W-Y\rVert_{F}^{2}+\rho_{2}\operatorname{tr}(W^{T}XLX^{T}W)\Big)
+s(W)=\min_{W}\Big(\lVert X^{T}W-Y\rVert_{F}^{2}+\rho_{2}\,\mathrm{tr}(W^{T}XLX^{T}W)\Big)
 \qquad (9)
 $$
 
