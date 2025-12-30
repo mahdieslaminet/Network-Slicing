@@ -309,3 +309,44 @@ $$
 =\ W^{T}XX^{T}W\ -\ W^{T}XY\ -\ Y^{T}X^{T}W\ +\ Y^{T}Y
 \qquad (10)
 $$
+
+طبق خواص مشتق‌گیری ماتریس‌ها داریم:
+
+$$
+\frac{\partial (X^{T}AX)}{\partial X}=(A+A^{T})X,\qquad
+\frac{\partial (AX)}{\partial X}=\frac{\partial (X^{T}A)}{\partial X}=A
+$$
+
+ما $$A=XX^{T}$$ و $$X=W$$ را قرار می‌دهیم. بنابراین داریم:
+
+$$
+\frac{\partial (W^{T}XX^{T}W)}{\partial W}=(XX^{T}+XX^{T})W=2XX^{T}W
+\qquad (11)
+$$
+
+همچنین $$A=XY$$ و $$X=W$$ را قرار می‌دهیم:
+
+$$
+\frac{\partial (W^{T}XY)}{\partial W}=\frac{\partial (Y^{T}X^{T}W)}{\partial W}=XY
+\qquad (12)
+$$
+
+پس:
+
+$$
+\frac{\partial s(W)_{1}}{\partial W}=2XX^{T}W-2XY
+\qquad (13)
+$$
+
+از آن‌جا که $$s(W)_{2}=\min_{W}\ \mathrm{tr}(W^{T}XLX^{T}W)$$، طبق فرمول مشتق تریس ماتریسی:
+
+$$
+\frac{\partial\,\mathrm{tr}(W^{T}AW)}{\partial W}=(A+A^{T})W
+$$
+
+اگر $$A=XLX^{T}$$ باشد، در نتیجه:
+
+$$
+\frac{\partial s(W)_{2}}{\partial W}=(XLX^{T}+XL^{T}X^{T})W=2XLX^{T}W
+\qquad (14)
+$$
