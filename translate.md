@@ -382,12 +382,14 @@ W^{k+1}=\arg\min_{W}\left\{\rho_{1}\lVert W\rVert_{1}+\frac{1}{2\alpha}\lVert W-
 \qquad (18)
 $$
 
+
 فرض کنید:
 
 $$
 v(W)=\left\{\rho_{1}\lVert W\rVert_{1}+\frac{1}{2\alpha}\lVert W-W^{k+\frac{1}{2}}\rVert_{2}^{2}\right\}
 \qquad (19)
 $$
+
 
 $$
 \frac{\partial v(W)}{\partial (W)}=\frac{1}{\alpha}\left(W-W^{k+\frac{1}{2}}\right)+\rho_{1}\,\mathrm{sgn}(W)
@@ -397,10 +399,11 @@ $$
 برای مشتق‌های $$\rho_{1}\lVert W\rVert_{1}$$، از آستانه‌گذاری نرم (soft thresholding) [27] استفاده می‌شود. سپس $$W$$ را به شکل زیر به‌روزرسانی می‌کنیم:
 
 $$
-W^{k+1}=\mathrm{soft}\left(W^{k+\frac{1}{2}},\alpha\rho_{1}\right)
-=\mathrm{sign}\left(W^{k+\frac{1}{2}}\right)\max\left\{\left|W^{k+\frac{1}{2}}\right|-\alpha\rho_{1},0\right\}
+W^{k+1}=\mathrm{soft}\!\left(W^{k+\frac{1}{2}},\alpha\rho_{1}\right)
+=\mathrm{sign}\!\left(W^{k+\frac{1}{2}}\right)\max\left\{\left|W^{k+\frac{1}{2}}\right|-\alpha\rho_{1},0\right\}
 \qquad (21)
 $$
+
 
 $$
 W^{k+1}=
@@ -415,9 +418,10 @@ $$
 طبق قضیهٔ همگرایی (convergence theorem) [28]:
 
 $$
-f(W(t_k))-f(W^{*})\le \frac{2\gamma \lVert W(1)-W^{*}\rVert_{F}^{2}}{(t+1)^{2}
+f\!\left(W(t_k)\right)-f\!\left(W^{*}\right)\le \frac{2\gamma \lVert W(1)-W^{*}\rVert_{F}^{2}}{(t+1)^{2}}
 \qquad (23)
 $$
+
 
 که در آن $$\gamma$$ یک ثابتِ مثبتِ از پیش تعریف‌شده است، و $$L$$ یک ثابتِ لیپشیتزِ تدریجی (gradual Lipschitz constant) است.  
 در ترکیب با معادله (22)، $$W^{k+1}$$ مطابق معادله (24) به‌دست می‌آید:
