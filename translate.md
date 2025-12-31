@@ -400,9 +400,10 @@ $$
 
 $$
 W^{k+1}=\mathrm{soft}\!\left(W^{k+\frac{1}{2}},\alpha\rho_{1}\right)
-=\mathrm{sign}\!\left(W^{k+\frac{1}{2}}\right)\max\left\{\left|W^{k+\frac{1}{2}}\right|-\alpha\rho_{1},0\right\}
+=\mathrm{sign}\!\left(W^{k+\frac{1}{2}}\right)\max\left\{\lvert W^{k+\frac{1}{2}}\rvert-\alpha\rho_{1},0\right\}
 \qquad (21)
 $$
+
 
 
 $$
