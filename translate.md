@@ -415,7 +415,7 @@ $$
 طبق قضیهٔ همگرایی (convergence theorem) [28]:
 
 $$
-f(W(t_k))-f(W^{*})\le \frac{2\gamma \lVert W(1)-W^{*}\rVert_{F}^{2}}{(t+1)^{2}}
+f(W(t_k))-f(W^{*})\le \frac{2\gamma \lVert W(1)-W^{*}\rVert_{F}^{2}}{(t+1)^{2}
 \qquad (23)
 $$
 
