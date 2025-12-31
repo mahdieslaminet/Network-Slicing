@@ -378,7 +378,7 @@ $$
 سپس نتیجهٔ میانی در جملهٔ غیرهموار (non-smooth term) جایگذاری می‌شود تا تصویر (projection) نقاط مجاور آن به دست آید؛ یعنی یک تکرار (iteration) کامل شود.
 
 $$
-W^{k+1}=\arg\min_{W}\left\{\rho_{1}\lVert W\rVert_{1}+\frac{1}{2\alpha}\lVert W-W^{k+\frac{1}{2}}\rVert_{2}^{2}\right\}
+W^{k+1}=\underset{W}{\mathrm{argmin}}\left\{\rho_{1}\lVert W\rVert_{1}+\frac{1}{2\alpha}\lVert W-W^{k+\frac{1}{2}}\rVert_{2}^{2}\right\}
 \qquad (18)
 $$
 
