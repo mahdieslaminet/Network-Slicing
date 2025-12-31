@@ -423,9 +423,10 @@ $$
 طبق قضیهٔ همگرایی (convergence theorem) [28]:
 
 $$
-f\left(W(t_k)\right)-f\left(W^{*}\right)\le \frac{2\gamma \left\|W(1)-W^{*}\right\|_{F}^{2}}{(t+1)^{2}}
+f\left(W(t_k)\right)-f\left(W^{*}\right)\le \frac{2\gamma L\left\|W(1)-W^{*}\right\|_{F}^{2}}{(t+1)^{2}}
 \qquad (23)
 $$
+
 
 
 
