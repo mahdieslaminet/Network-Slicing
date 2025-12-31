@@ -383,12 +383,14 @@ W^{k+1}=\arg\min_{W}\left\{\rho_{1}\lVert W\rVert_{1}+\frac{1}{2\alpha}\lVert W-
 $$
 
 
+
 فرض کنید:
 
 $$
 v(W)=\left\{\rho_{1}\lVert W\rVert_{1}+\frac{1}{2\alpha}\lVert W-W^{k+\frac{1}{2}}\rVert_{2}^{2}\right\}
 \qquad (19)
 $$
+
 
 
 $$
@@ -399,10 +401,11 @@ $$
 برای مشتق‌های $$\rho_{1}\lVert W\rVert_{1}$$، از آستانه‌گذاری نرم (soft thresholding) [27] استفاده می‌شود. سپس $$W$$ را به شکل زیر به‌روزرسانی می‌کنیم:
 
 $$
-W^{k+1}=\mathrm{soft}\!\left(W^{k+\frac{1}{2}},\alpha\rho_{1}\right)
-=\mathrm{sign}\!\left(W^{k+\frac{1}{2}}\right)\max\left\{\lvert W^{k+\frac{1}{2}}\rvert-\alpha\rho_{1},0\right\}
+W^{k+1}=\mathrm{soft}\left(W^{k+\frac{1}{2}},\alpha\rho_{1}\right)
+=\mathrm{sign}\left(W^{k+\frac{1}{2}}\right)\max\left\{\lvert W^{k+\frac{1}{2}}\rvert-\alpha\rho_{1},0\right\}
 \qquad (21)
 $$
+
 
 
 
@@ -419,9 +422,10 @@ $$
 طبق قضیهٔ همگرایی (convergence theorem) [28]:
 
 $$
-f\!\left(W(t_k)\right)-f\!\left(W^{*}\right)\le \frac{2\gamma \lVert W(1)-W^{*}\rVert_{F}^{2}}{(t+1)^{2}}
+f\left(W(t_k)\right)-f\left(W^{*}\right)\le \frac{2\gamma \lVert W(1)-W^{*}\rVert_{F}^{2}}{(t+1)^{2}}
 \qquad (23)
 $$
+
 
 
 که در آن $$\gamma$$ یک ثابتِ مثبتِ از پیش تعریف‌شده است، و $$L$$ یک ثابتِ لیپشیتزِ تدریجی (gradual Lipschitz constant) است.  
